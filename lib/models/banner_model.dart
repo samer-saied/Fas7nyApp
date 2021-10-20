@@ -18,11 +18,8 @@ class Banner {
     publishedAt = json['published_at'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    bannerImage = (json['bannerImage'] != null
-        ? Images.fromJson(json['bannerImage'])
-        : null)!;
-
-    place = (json['place'] != null ? Place.fromJson(json['place']) : tempPlace);
+    bannerImage = Images.fromJson(json['bannerImage']);
+    place = Place.fromJson(json['place']);
     id = json['id'];
   }
 

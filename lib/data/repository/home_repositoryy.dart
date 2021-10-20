@@ -1,7 +1,6 @@
+import 'package:fas7ny/data/web_services/dio_services.dart';
 import 'package:fas7ny/models/banner_model.dart';
 import 'package:fas7ny/models/city_model.dart';
-
-import '../web_services/dio_services.dart';
 
 class HomesRepository {
   final Services services;
@@ -17,8 +16,7 @@ class HomesRepository {
   }
 
   Future<List<City>> getAllCities() async {
-    final cities =
-        await services.getAllWithLang(gategory: "cities", lang: 'en');
+    final cities = await services.getAll(gategory: "cities");
     return cities
         .map((cityData) => City.fromJson(cityData as Map<String, dynamic>))
         .toList();

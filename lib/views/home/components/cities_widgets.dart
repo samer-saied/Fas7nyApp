@@ -91,7 +91,7 @@ class CityCardWidget extends StatelessWidget {
                     child: Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Text(
-                    city.name,
+                    city.nameEn,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.subtitle1,
                   ),

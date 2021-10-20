@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                         // Text(BlocProvider.of<PlaceCubit>(context)
                         //     .allplaces[index]
                         //     .fullName),
-                        Text(state.places[index].fullName.toString()),
+                        Text(state.places[index].nameEn.toString()),
                   );
                 });
           } else if (state is PlaceLoadingState) {

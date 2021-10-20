@@ -1,21 +1,35 @@
-import 'images_model.dart';
+import 'dart:convert';
+
+import 'package:fas7ny/models/images_model.dart';
+
+import 'city_model.dart';
 
 class Place {
   late int expectedPrice;
   late List<Images> images;
   late List<String> seasons;
+  late int rate;
+  late String latitude;
+  late String longitude;
   late String address;
-  late String fullName;
-  late String description;
   late String publishedAt;
+  late String createdAt;
   late String updatedAt;
   late Images mainImage;
-  late List<String> moods = [];
-  late List<String> activities = [];
-  late List<String> perfectTimes = [];
+  late String city;
+  late String descriptionAr;
+  late String nameAr;
+  late String addressAr;
+  late String addressEn;
+  late String descriptionEn;
+  late String nameEn;
+  late List<Moods> moods = [];
+  late List<Activities> activities;
+  late List<PerfectTimes> perfectTimes;
   late String id;
 
   Place.fromJson(Map<String, dynamic> json) {
+    expectedPrice = json['expected_price'];
     if (json['images'] != null) {
       images = <Images>[];
       json['images'].forEach((v) {
@@ -24,159 +38,182 @@ class Place {
     }
     if (json['seasons'] != null) {
       seasons = [];
-      json['seasons'].forEach((v) {
-        seasons.add(v);
+
+      json['seasons'].forEach((season) {
+        seasons.add(season);
+        print(seasons.toList());
       });
     }
-    expectedPrice = json['expected_price'];
+    rate = json['rate'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
     address = json['address'];
-    fullName = json['full_name'];
-    description = json['description'];
     publishedAt = json['published_at'];
+    createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    mainImage = (json['main_image'] != null
-        ? Images.fromJson(json['main_image'])
-        : null)!;
-
+    mainImage = Images.fromJson(json['main_image']);
+    city = json['city'];
+    descriptionAr = json['description_ar'];
+    nameAr = json['name_ar'];
+    addressAr = json['address_ar'];
+    addressEn = json['address_en'];
+    descriptionEn = json['description_en'];
+    nameEn = json['name_en'];
+    if (json['moods'] != null) {
+      moods = <Moods>[];
+      json['moods'].forEach((v) {
+        moods.add(Moods.fromJson(v));
+      });
+    }
     if (json['activities'] != null) {
-      activities = <String>[];
+      activities = <Activities>[];
       json['activities'].forEach((v) {
-        activities.add(Activities.fromJson(v).activityName);
+        activities.add(Activities.fromJson(v));
       });
     }
     if (json['perfect_times'] != null) {
-      perfectTimes = <String>[];
+      perfectTimes = <PerfectTimes>[];
       json['perfect_times'].forEach((v) {
-        perfectTimes.add(PerfectTimes.fromJson(v).period);
+        perfectTimes.add(PerfectTimes.fromJson(v));
       });
     }
-
     id = json['id'];
-    if (json['moods'] != null) {
-      moods = [];
-      json['moods'].forEach((mood) {
-        //  print(mood.toString());
-        moods.add(mood['mood_name']);
-      });
-    }
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['expected_price'] = expectedPrice;
-    if (images != null) {
-      data['images'] = images.map((v) => v).toList();
+    data['expected_price'] = this.expectedPrice;
+    if (this.images != null) {
+      data['images'] = this.images.map((v) => v.toJson()).toList();
     }
-    if (seasons != null) {
-      data['seasons'] = seasons.map((v) => v).toList();
+    if (this.seasons != null) {
+      data['seasons'] = this.seasons.map((v) => v).toList();
     }
-    data['address'] = address;
-    data['full_name'] = fullName;
-    data['description'] = description;
-    data['published_at'] = publishedAt;
-    data['updatedAt'] = updatedAt;
-    if (mainImage != null) {
-      data['main_image'] = mainImage.toJson();
+    data['rate'] = this.rate;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    data['address'] = this.address;
+    data['published_at'] = this.publishedAt;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    if (this.mainImage != null) {
+      data['main_image'] = this.mainImage.toJson();
     }
-    if (moods != null) {
-      data['moods'] = moods.map((v) => v).toList();
+    if (this.city != null) {
+      data['city'] = this.city;
     }
-    if (activities != null) {
-      data['activities'] = activities.map((v) => v).toList();
+    data['description_ar'] = this.descriptionAr;
+    data['name_ar'] = this.nameAr;
+    data['address_ar'] = this.addressAr;
+    data['address_en'] = this.addressEn;
+    data['description_en'] = this.descriptionEn;
+    data['name_en'] = this.nameEn;
+    if (this.moods != null) {
+      data['moods'] = this.moods.map((v) => v.toJson()).toList();
     }
-    if (perfectTimes != null) {
-      data['perfect_times'] = perfectTimes.map((v) => v).toList();
+    if (this.activities != null) {
+      data['activities'] = this.activities.map((v) => v.toJson()).toList();
     }
-    data['id'] = id;
+    if (this.perfectTimes != null) {
+      data['perfect_times'] = this.perfectTimes.map((v) => v.toJson()).toList();
+    }
+    data['id'] = this.id;
     return data;
   }
 }
 
-Place tempPlace = Place.fromJson(temp);
-
-Map<String, dynamic> temp = {
-  "expected_price": 0,
-  "images": [
-    {
-      "url":
-          "https://res.cloudinary.com/fas7ny/image/upload/v1634024958/download_a025d6ccf0.png",
-      "id": "616502fad1fb735647721e51"
-    }
-  ],
-  "seasons": [],
-  "_id": "61650316d1fb735647721e54",
-  "rate": 4,
-  "latitude": "0",
-  "longitude": "0",
-  "address": "No Plce Available",
-  "full_name": "None",
-  "description": " None",
-  "locale": "ar-EG",
-  "published_at": "2021-10-12T03:42:15.750Z",
-  "createdAt": "2021-10-12T03:37:58.957Z",
-  "updatedAt": "2021-10-12T03:42:16.601Z",
-  "__v": 0,
-  "main_image": {
-    "id": "616502fad1fb735647721e51",
-    "url":
-        "https://res.cloudinary.com/fas7ny/image/upload/v1634024958/download_a025d6ccf0.png",
-  },
-  "city": "none",
-  "id": "61650316d1fb735647721e54"
-};
-
 class Seasons {
-  late String name;
+  late String nameAr;
+  late String nameEn;
   late String id;
 
   Seasons.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
+    nameAr = json['name_ar'];
+    nameEn = json['name_en'];
     id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['id'] = id;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+
+    data['name_ar'] = this.nameAr;
+    data['name_en'] = this.nameEn;
+    data['id'] = this.id;
+    return data;
+  }
+}
+
+class Moods {
+  late String moodDescriptionEn;
+  late String moodNameEn;
+  late String moodDescriptionAr;
+  late String moodNameAr;
+  late String id;
+
+  Moods.fromJson(Map<String, dynamic> json) {
+    moodDescriptionEn = json['mood_description_en'];
+    moodNameEn = json['mood_name_en'];
+    moodDescriptionAr = json['mood_description_ar'];
+    moodNameAr = json['mood_name_ar'];
+    id = json['id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['mood_description_en'] = this.moodDescriptionEn;
+    data['mood_name_en'] = this.moodNameEn;
+    data['mood_description_ar'] = this.moodDescriptionAr;
+    data['mood_name_ar'] = this.moodNameAr;
+    data['id'] = this.id;
     return data;
   }
 }
 
 class Activities {
-  late String activityName;
-  late String activityDescription;
+  late String activityDescriptionEn;
+  late String activityNameEn;
+  late String activityDescriptionAr;
+  late String activityNameAr;
   late String id;
 
   Activities.fromJson(Map<String, dynamic> json) {
-    activityName = json['activity_name'];
-    activityDescription = json['activity_description'];
+    activityDescriptionEn = json['activity_description_en'];
+    activityNameEn = json['activity_name_en'];
+    activityDescriptionAr = json['activity_description_ar'];
+    activityNameAr = json['activity_name_ar'];
     id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['activity_name'] = activityName;
-    data['activity_description'] = activityDescription;
-    data['id'] = id;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['activity_description_en'] = this.activityDescriptionEn;
+    data['activity_name_en'] = this.activityNameEn;
+    data['activity_description_ar'] = this.activityDescriptionAr;
+    data['activity_name_ar'] = this.activityNameAr;
+    data['id'] = this.id;
     return data;
   }
 }
 
 class PerfectTimes {
-  late String time;
   late String period;
+  late String timeAr;
+  late String timeEn;
   late String id;
 
   PerfectTimes.fromJson(Map<String, dynamic> json) {
-    time = json['time'];
     period = json['period'];
+    timeAr = json['time_ar'];
+    timeEn = json['time_en'];
     id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['time'] = time;
-    data['period'] = period;
-    data['id'] = id;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['period'] = this.period;
+    data['time_ar'] = this.timeAr;
+    data['time_en'] = this.timeEn;
+    data['id'] = this.id;
     return data;
   }
 }

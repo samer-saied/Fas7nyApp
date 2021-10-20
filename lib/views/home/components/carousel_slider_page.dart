@@ -5,6 +5,7 @@ import 'package:fas7ny/constants/my_colors.dart';
 import 'package:fas7ny/cubit/home_cubit/home_cubit.dart';
 import 'package:fas7ny/cubit/home_cubit/home_state.dart';
 import 'package:fas7ny/views/details/details_page.dart';
+import 'package:fas7ny/views/details/details_page2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +49,7 @@ class CarouselWidget extends StatelessWidget {
                       onTap: () {
                         print(itemIndex);
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => DetailsPage(
+                            builder: (context) => DetailsPlacePage(
                                 place: state.banners[itemIndex].place)));
                       },
                       child: Stack(

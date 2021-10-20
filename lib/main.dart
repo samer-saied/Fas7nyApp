@@ -4,6 +4,7 @@ import 'package:fas7ny/cubit/observe_cubit.dart';
 import 'package:fas7ny/data/repository/home_repositoryy.dart';
 import 'package:fas7ny/data/repository/places_repository.dart';
 import 'package:fas7ny/data/web_services/dio_services.dart';
+import 'package:fas7ny/views/details/details_page2.dart';
 import 'package:fas7ny/views/home/layouts/home_page.dart';
 import 'package:fas7ny/views/login/login_page.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        home: const HomePage(),
+        home: LoginPage(),
         color: MyColors.myDarkGrey,
         debugShowCheckedModeBanner: false,
         title: "Fas7ny",
