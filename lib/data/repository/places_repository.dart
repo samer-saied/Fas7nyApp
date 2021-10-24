@@ -1,26 +1,27 @@
+import 'dart:convert';
+
+import 'package:fas7ny/data/web_services/http_services.dart';
 import 'package:fas7ny/models/place_model.dart';
 
-import '../web_services/dio_services.dart';
 
 class PlacesRepository {
-  final Services services;
+  final HttpServices services;
 
   PlacesRepository(this.services);
 
   Future<List<Place>> getAllPlaces() async {
     try {
-      final List places =
-          await services.getAllWithLang(gategory: 'places', lang: 'en');
-      print(places.length);
-      return places.map((place) => Place.fromJson(place)).toList();
+      final response = await services.getData(gategory: 'places');
+      List<dynamic> cities = jsonDecode(response);
+      return cities.map((place) => Place.fromJson(place)).toList();
     } catch (e) {
-      return [];
+      throw Exception('Failed to load places');
     }
   }
 
-  Future<Place> getOnePlace(String placeId) async {
-    final place = await services.getOnePlace(
-        gategory: 'placess', lang: 'en', placeID: '');
-    return place;
-  }
+  // Future<Place> getOnePlace(String placeId) async {
+  //   final place =
+  //       await services.getOnePlace(gategory: 'places', placeID: placeId);
+  //   return place;
+  // }
 }

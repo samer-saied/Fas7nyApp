@@ -7,6 +7,7 @@ environment:
 dependencies:
   animated_text_kit: ^4.2.1
   bloc: ^7.2.1
+  cached_network_image: ^3.1.0
   carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2
   dio: ^4.0.0
@@ -14,7 +15,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^7.3.0
-  http: ^0.13.3
+  fluttertoast: ^8.0.8
+  http: ^0.13.4
+  shimmer: ^2.0.0
   simple_animations: ^4.0.1
 
 dev_dependencies:

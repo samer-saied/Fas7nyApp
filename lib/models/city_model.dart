@@ -14,13 +14,13 @@ class City {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.image != null) {
-      data['image'] = this.image.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (image != null) {
+      data['image'] = image.toJson();
     }
-    data['Name_ar'] = this.nameAr;
-    data['Name_en'] = this.nameEn;
-    data['id'] = this.id;
+    data['Name_ar'] = nameAr;
+    data['Name_en'] = nameEn;
+    data['id'] = id;
     return data;
   }
 }

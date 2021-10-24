@@ -8,12 +8,16 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Text(
-        titleName,
-        style: Theme.of(context).textTheme.caption,
-      ),
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Text(
+            titleName,
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -25,23 +29,23 @@ class CircleLoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
         child: CircularProgressIndicator(
-      color: MyColors.myGoldRGB,
+      color: MyColors.mypurpleRGB,
     ));
   }
 }
 
-class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({
+class AppLogoWidget extends StatelessWidget {
+  const AppLogoWidget({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      centerTitle: true,
-      iconTheme: IconThemeData(color: MyColors.myDarkGoldRGB),
+      //centerTitle: true,
+      iconTheme: const IconThemeData(color: MyColors.mypurpleRGB),
       elevation: 0,
-      backgroundColor: MyColors.mypagge,
+      backgroundColor: Colors.transparent,
       title: const Fas7nyWordWidget(
         fontSize: 36,
       ),
@@ -72,7 +76,7 @@ class Fas7nyWordWidget extends StatelessWidget {
               text: '7',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: MyColors.myDarkGoldRGB,
+                color: MyColors.mypurpleRGB,
               )),
           TextSpan(text: 'ny'),
         ],

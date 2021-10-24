@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class MyColors {
-  static const Color mypagge = Color(0xFFefeae7);
+  //static const Color mypagge = Color(0xFFefeae7);
   static const Color myblack = Color(0xFF000000);
   static const Color myGrey = Color(0xFFE4E4E4);
-  static const Color myWhite = Color(0xffE1E8EB);
+  static const Color myWhite = Color(0xFFFFFFFF);
+  static const Color mylightBlue = Color(0xffE1E8EB);
+
   static const Color mylightpink = Color(0xFFefeae7);
   static const Color myDarkGrey = Color(0xff343A40);
   static const Color mypaggeRGB = Color.fromRGBO(244, 221, 168, 0.2);

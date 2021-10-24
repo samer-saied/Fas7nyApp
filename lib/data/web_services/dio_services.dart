@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../constants/strings.dart';
 
-class Services {
+class DioServices {
   late Dio dio;
 
   Services() {
@@ -20,35 +20,21 @@ class Services {
 
   Future<List<dynamic>> getAll({required String gategory}) async {
     try {
-      Response response = await dio.get('$gategory');
+      Response response = await dio.get(gategory);
       return response.data;
     } catch (error) {
-      print(error.toString());
-      return [];
-    }
-  }
-
-  Future<List<dynamic>> getAllWithLang(
-      {required String gategory, required String lang}) async {
-    try {
-      Response response = await dio.get('$gategory?_locale=$lang');
-      return response.data;
-    } catch (error) {
-      print(error.toString());
       return [];
     }
   }
 
   Future<dynamic> getOnePlace(
-      {required String gategory,
-      required String lang,
-      required String placeID}) async {
+      {required String gategory, required String placeID}) async {
     try {
-      Response response = await dio.get('$gategory/$placeID?_locale=$lang');
-      // print(response.data.toString());
+      Response response = await dio.get('$gategory/$placeID');
+      print("ID :" + placeID);
       return response.data;
     } catch (error) {
-      //  print(error.toString());
+      print("---------------------");
       return [];
     }
   }

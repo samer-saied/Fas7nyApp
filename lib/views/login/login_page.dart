@@ -11,7 +11,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: MyColors.mypagge,
+        backgroundColor: MyColors.myWhite,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
@@ -66,7 +66,7 @@ class LoginPage extends StatelessWidget {
                         Text(
                           "Login ",
                           style: TextStyle(
-                              color: MyColors.myDarkGoldRGB,
+                              color: MyColors.mypurpleRGB,
                               fontFamily: 'Ubuntu',
                               fontSize: 30,
                               fontWeight: FontWeight.bold),
@@ -81,9 +81,10 @@ class LoginPage extends StatelessWidget {
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
-                              boxShadow: const [
+                              boxShadow: [
                                 BoxShadow(
-                                    color: MyColors.mypaggeRGB,
+                                    color:
+                                        MyColors.mypurpleRGB.withOpacity(0.20),
                                     blurRadius: 20.0,
                                     offset: Offset(0, 10))
                               ]),
@@ -121,7 +122,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const HomePage()));
@@ -134,8 +135,8 @@ class LoginPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                               gradient: const LinearGradient(
                                 colors: [
-                                  MyColors.mylightGoldRGB,
-                                  MyColors.myDarkGoldRGB,
+                                  MyColors.mylightpink,
+                                  MyColors.mypurpleRGB,
                                 ],
                                 begin: Alignment.bottomRight,
                                 end: Alignment(0.2, 0.0),
@@ -161,7 +162,7 @@ class LoginPage extends StatelessWidget {
                         Center(
                           child: Text(
                             "Don't have account?",
-                            style: TextStyle(color: MyColors.myDarkGoldRGB),
+                            style: TextStyle(color: MyColors.mypurpleRGB),
                           ),
                         )),
                   ],

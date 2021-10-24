@@ -2,47 +2,8 @@ import 'package:fas7ny/constants/my_colors.dart';
 import 'package:fas7ny/models/place_model.dart';
 import 'package:flutter/material.dart';
 
-class DetailsPlacePage extends StatelessWidget {
-  final Place place;
-
-  const DetailsPlacePage({Key? key, required this.place}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.mypagge,
-      body: Stack(
-        children: [
-          ImagePlaceWidget(place: place),
-          Positioned(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    const AppBarWidget(),
-                    SizedBox(
-                      width: 5,
-                      height: MediaQuery.of(context).size.height * .35,
-                    ),
-                    PlaceDataWidget(
-                      place: place,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ImagePlaceWidget extends StatelessWidget {
-  const ImagePlaceWidget({
+class PlaceImageWidget extends StatelessWidget {
+  const PlaceImageWidget({
     Key? key,
     required this.place,
   }) : super(key: key);
@@ -72,7 +33,7 @@ class AppBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 25.0, left: 5),
+      padding: const EdgeInsets.only(top: 35.0, left: 5),
       child: Row(
         children: [
           IconButton(
@@ -81,7 +42,7 @@ class AppBarWidget extends StatelessWidget {
               },
               icon: Container(
                 decoration: BoxDecoration(
-                  color: MyColors.mypagge,
+                  color: MyColors.myWhite,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Center(
@@ -112,7 +73,7 @@ class PlaceDataWidget extends StatelessWidget {
       ),
       // height: 800,
       decoration: BoxDecoration(
-        color: MyColors.mypagge,
+        color: MyColors.myWhite,
         borderRadius: BorderRadius.circular(30),
       ),
       child: Column(
@@ -139,7 +100,7 @@ class PlaceDataWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.caption,
           ),
           Text(
-            place.seasons.toString(),
+            place.moods.toString(),
           ),
           const SizedBox(
             height: 10,
@@ -173,20 +134,22 @@ class PlaceImagesWidget extends StatelessWidget {
       child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          itemCount: place.images.length,
+          itemCount: place.images.length + 1,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(left: 0.0, right: 8, top: 8),
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 child: Image(
-                  image: NetworkImage(place.images[index].url),
+                  image: index == 0
+                      ? NetworkImage(place.mainImage.url)
+                      : NetworkImage(place.images[index - 1].url),
                   fit: BoxFit.cover,
                 ),
-                width: 75,
+                width: 70,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: MyColors.myGoldRGB,
+                  color: MyColors.myGrey,
                 ),
               ),
             );
@@ -257,7 +220,7 @@ class RateWidget extends StatelessWidget {
     return Container(
       width: 70,
       decoration: BoxDecoration(
-        color: MyColors.myDarkGoldRGB,
+        color: MyColors.mypurpleRGB,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
