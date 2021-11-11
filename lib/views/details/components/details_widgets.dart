@@ -1,3 +1,4 @@
+import 'package:fas7ny/components/image_viewer.dart';
 import 'package:fas7ny/constants/my_colors.dart';
 import 'package:fas7ny/models/place_model.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class PlaceImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(place.id);
     return Positioned(
       top: 0,
       left: 0,
@@ -25,16 +27,17 @@ class PlaceImageWidget extends StatelessWidget {
   }
 }
 
-class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({
+class AppBackBtnWidget extends StatelessWidget {
+  const AppBackBtnWidget({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 35.0, left: 5),
+      padding: const EdgeInsets.only(top: 35.0, right: 5),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           IconButton(
               onPressed: () {
@@ -42,12 +45,18 @@ class AppBarWidget extends StatelessWidget {
               },
               icon: Container(
                 decoration: BoxDecoration(
-                  color: MyColors.myWhite,
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                    color: MyColors.myWhite,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: MyColors.myGrey,
+                          offset: Offset(1.2, 1.2),
+                          blurRadius: .30,
+                          spreadRadius: .30)
+                    ]),
                 child: const Center(
                   child: Icon(
-                    Icons.arrow_back,
+                    Icons.close,
                     size: 23,
                   ),
                 ),
@@ -99,8 +108,15 @@ class PlaceDataWidget extends StatelessWidget {
             "Time To Visit",
             style: Theme.of(context).textTheme.caption,
           ),
-          Text(
-            place.moods.toString(),
+          Container(
+            height: 17,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: false,
+                itemCount: place.perfectTimes.length,
+                itemBuilder: (context, index) {
+                  return Text(place.perfectTimes[index].period);
+                }),
           ),
           const SizedBox(
             height: 10,
@@ -120,31 +136,46 @@ class PlaceDataWidget extends StatelessWidget {
 }
 
 class PlaceImagesWidget extends StatelessWidget {
-  const PlaceImagesWidget({
+  PlaceImagesWidget({
     Key? key,
     required this.place,
   }) : super(key: key);
 
   final Place place;
+  List<String> images = [];
 
   @override
   Widget build(BuildContext context) {
+    collectPlaceImage();
+
     return SizedBox(
       height: 75,
       child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          itemCount: place.images.length + 1,
+          itemCount: images.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(left: 0.0, right: 8, top: 8),
               child: Container(
                 clipBehavior: Clip.antiAlias,
-                child: Image(
-                  image: index == 0
-                      ? NetworkImage(place.mainImage.url)
-                      : NetworkImage(place.images[index - 1].url),
-                  fit: BoxFit.cover,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ImageViewer(images: images, selectedIndex: index),
+                      ),
+                    );
+                  },
+                  child: Hero(
+                    tag: images[index],
+                    child: Image(
+                      image: NetworkImage(images[index]),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 width: 70,
                 decoration: BoxDecoration(
@@ -155,6 +186,13 @@ class PlaceImagesWidget extends StatelessWidget {
             );
           }),
     );
+  }
+
+  void collectPlaceImage() {
+    images.add(place.mainImage.url);
+    for (var image in place.images) {
+      images.add(image.url);
+    }
   }
 }
 
@@ -220,7 +258,7 @@ class RateWidget extends StatelessWidget {
     return Container(
       width: 70,
       decoration: BoxDecoration(
-        color: MyColors.mypurpleRGB,
+        color: MyColors.myMainColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(

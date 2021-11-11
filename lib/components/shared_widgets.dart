@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:fas7ny/constants/my_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TitleWidget extends StatelessWidget {
   final String titleName;
@@ -29,7 +30,7 @@ class CircleLoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
         child: CircularProgressIndicator(
-      color: MyColors.mypurpleRGB,
+      color: MyColors.myMainColor,
     ));
   }
 }
@@ -42,12 +43,13 @@ class AppLogoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      //centerTitle: true,
-      iconTheme: const IconThemeData(color: MyColors.mypurpleRGB),
+      systemOverlayStyle:
+          const SystemUiOverlayStyle(statusBarColor: MyColors.myMainColor),
+      iconTheme: const IconThemeData(color: MyColors.myMainColor),
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: const Fas7nyWordWidget(
-        fontSize: 36,
+        fontSize: 30,
       ),
     );
   }
@@ -76,7 +78,7 @@ class Fas7nyWordWidget extends StatelessWidget {
               text: '7',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: MyColors.mypurpleRGB,
+                color: MyColors.myMainColor,
               )),
           TextSpan(text: 'ny'),
         ],
@@ -109,4 +111,13 @@ class AnimatedTextWidget extends StatelessWidget {
       },
     );
   }
+}
+
+getSnackBar(BuildContext context, String msgTxt) {
+  return ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(msgTxt),
+      backgroundColor: MyColors.myMainColor,
+    ),
+  );
 }

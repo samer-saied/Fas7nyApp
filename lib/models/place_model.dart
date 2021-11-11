@@ -1,3 +1,4 @@
+import 'package:fas7ny/models/city_model.dart';
 import 'package:fas7ny/models/images_model.dart';
 
 class Place {
@@ -34,14 +35,20 @@ class Place {
     if (json['seasons'] != null) {
       seasons = [];
 
-      json['seasons'].forEach((season) {
-        seasons.add(Seasons.fromJson(season).nameEn);
-      });
+      json['seasons'].forEach(
+        (season) {
+          if (season is String) {
+            seasons.add(season);
+          } else {
+            seasons.add(Seasons.fromJson(season).nameEn);
+          }
+        },
+      );
     }
     if (json['moods'] != null) {
       moods = <Moods>[];
       json['moods'].forEach((v) {
-        //moods.add(Moods(id: v));
+        moods.add(Moods(id: v));
       });
     }
     if (json['activities'] != null) {
@@ -63,9 +70,15 @@ class Place {
     address = json['address'];
     publishedAt = json['published_at'];
     createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+    updatedAt = json['updatedAt'].toString();
     mainImage = Images.fromJson(json['main_image']);
-    city = json['city']['Name_en'];
+    ////////////      One Which type of city Api response          ///////////
+    if ((json['city'].toString().startsWith('{'))) {
+      city = json['city']['Name_en'];
+    } else {
+      city = json['city'];
+    }
+
     descriptionAr = json['description_ar'];
     nameAr = json['name_ar'];
     addressAr = json['address_ar'];

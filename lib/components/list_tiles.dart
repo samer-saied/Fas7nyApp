@@ -106,7 +106,7 @@ class GFListTile extends StatelessWidget {
           enabled: enabled,
           child: Container(
             clipBehavior: Clip.antiAlias,
-            // constraints: const BoxConstraints(minHeight: 50),
+            constraints: const BoxConstraints(minHeight: 50),
             padding: padding,
             margin: margin,
             decoration: BoxDecoration(
@@ -119,7 +119,9 @@ class GFListTile extends StatelessWidget {
                 avatar ?? Container(),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -129,7 +131,7 @@ class GFListTile extends StatelessWidget {
                                 style: const TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w500,
-                                    color: MyColors.mypurpleRGB),
+                                    color: MyColors.myMainColor),
                               )
                             : title ?? Container(),
                         subTitleText != null

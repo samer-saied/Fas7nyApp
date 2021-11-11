@@ -21,35 +21,6 @@ class BannerLoadedState extends HomeState {
   BannerLoadedState(this.banners);
 }
 
-//            Place          //
-class PlaceLoadingState extends HomeState {}
-
-class PlaceErrorState extends HomeState {
-  final String error;
-
-  PlaceErrorState(this.error);
-}
-
-class PlaceLoadedState extends HomeState {
-  final Place place;
-
-  PlaceLoadedState(this.place);
-} //            Place          //
-
-class PlacesLoadingState extends HomeState {}
-
-class PlacesErrorState extends HomeState {
-  final String error;
-
-  PlacesErrorState(this.error);
-}
-
-class PlacesLoadedState extends HomeState {
-  final List<Place> places;
-
-  PlacesLoadedState(this.places);
-}
-
 //        City              //
 class CityLoadingState extends HomeState {}
 
@@ -65,17 +36,32 @@ class CityLoadedState extends HomeState {
   CityLoadedState(this.cities);
 }
 
-//        Moods              //
-class MoodsLoadingState extends HomeState {}
+//         Recommended              //
+class RecomandedLoadingState extends HomeState {}
 
-class MoodsErrorState extends HomeState {
+class RecomandedErrorState extends HomeState {
   final String error;
 
-  MoodsErrorState(this.error);
+  RecomandedErrorState(this.error);
 }
 
-class MoodsLoadedState extends HomeState {
-  final List<Moods> moods;
+class RecomandedLoadedState extends HomeState {
+  final List<Place> recommendedPlaces;
 
-  MoodsLoadedState(this.moods);
+  RecomandedLoadedState(this.recommendedPlaces);
 }
+
+// //        Moods              //
+// class MoodsLoadingState extends HomeState {}
+
+// class MoodsErrorState extends HomeState {
+//   final String error;
+
+//   MoodsErrorState(this.error);
+// }
+
+// class MoodsLoadedState extends HomeState {
+//   final List<Moods> moods;
+
+//   MoodsLoadedState(this.moods);
+// }

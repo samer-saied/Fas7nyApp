@@ -8,6 +8,7 @@ import 'package:fas7ny/models/city_model.dart';
 import 'package:fas7ny/views/places_for_city/places_for_city.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CitiesWidget extends StatelessWidget {
@@ -16,31 +17,46 @@ class CitiesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<HomeCubit>(context).getAllCities();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const TitleWidget(
-          titleName: 'Cities',
-        ),
-        const SizedBox(height: 5),
-        BlocBuilder<HomeCubit, HomeState>(
-          builder: (context, state) {
-            var allCities = context.watch<HomeCubit>().allCities;
-            return SizedBox(
-              height: 150,
-              child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allCities.length,
-                  itemBuilder: (context, index) {
-                    return CityCardWidget(
-                      city: allCities[index],
-                    );
-                  }),
-            );
-          },
-        )
-      ],
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: (context, state) {
+        if (state is CityErrorState) {
+          Fluttertoast.showToast(
+              msg: "Cities can't load, Check Internet Connection ... 🔗",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: MyColors.myWhite,
+              textColor: MyColors.myMainColor,
+              fontSize: 16.0);
+        }
+      },
+      builder: (context, state) {
+        var allCities = BlocProvider.of<HomeCubit>(context).allCities;
+        if (state is CityLoadedState ||
+            BlocProvider.of<HomeCubit>(context).allCities.isNotEmpty) {
+          return Column(
+            children: [
+              const TitleWidget(
+                titleName: 'Cities',
+              ),
+              const SizedBox(height: 5),
+              SizedBox(
+                height: 150,
+                child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: allCities.length,
+                    itemBuilder: (context, index) {
+                      return CityCardWidget(
+                        city: allCities[index],
+                      );
+                    }),
+              ),
+            ],
+          );
+        }
+        return Container();
+      },
     );
   }
 }

@@ -9,12 +9,15 @@ dependencies:
   bloc: ^7.2.1
   cached_network_image: ^3.1.0
   carousel_slider: ^4.0.0
+  convex_bottom_bar: ^3.0.0
+  cubit: ^0.1.2
   cupertino_icons: ^1.0.2
   dio: ^4.0.0
   fancy_shimmer_image: ^2.0.0+2
   flutter:
     sdk: flutter
-  flutter_bloc: ^7.3.0
+  flutter_bloc: ^7.3.3
+  flutter_colorpicker: ^0.6.1
   fluttertoast: ^8.0.8
   http: ^0.13.4
   shimmer: ^2.0.0

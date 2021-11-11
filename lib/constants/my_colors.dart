@@ -15,5 +15,6 @@ class MyColors {
   static const Color myDarkGoldRGB = Color.fromRGBO(211, 172, 80, 1);
 
   static const Color mylightpurpleRGB = Color.fromRGBO(253, 175, 254, 1);
-  static const Color mypurpleRGB = Color.fromRGBO(139, 62, 140, 1);
+  static const Color myMainColor = Color(0xFFDA1E91);
+  static const Color mypinkleRGB = Color.fromRGBO(139, 62, 140, 1);
 }

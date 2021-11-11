@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:fas7ny/cubit/home_cubit/home_state.dart';
-import 'package:fas7ny/data/repository/home_repositoryy.dart';
+import 'package:fas7ny/data/repository/home_repository.dart';
 import 'package:fas7ny/models/banner_model.dart';
 import 'package:fas7ny/models/city_model.dart';
 import 'package:fas7ny/models/place_model.dart';
@@ -13,14 +13,13 @@ class HomeCubit extends Cubit<HomeState> {
   List<City> allCities = [];
   List<Moods> allMoods = [];
   List<Place> recommendedPlaces = [];
-  late Place place;
 
   void getAllBanners() {
     emit(BannerLoadingState());
     homeRepository.getAllBanners().then((banners) {
       allBanners = banners;
 
-      emit(BannerLoadedState(allBanners));
+      emit(BannerLoadedState(banners));
     }).catchError((error) {
       emit(BannerErrorState(error.toString()));
     });
@@ -36,23 +35,13 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  void getPlace({required String placeId}) {
-    emit(PlaceLoadingState());
-    homeRepository.getPlace(placeId: placeId).then((city) {
-      emit(PlaceLoadedState(city));
-    }).catchError((error) {
-      emit(PlaceErrorState(error.toString()));
-    });
-    ;
-  }
-
   void getAllRecommendedPlaces() {
-    emit(PlacesLoadingState());
+    emit(RecomandedLoadingState());
     homeRepository.getAllRecommendedPlaces().then((places) {
       recommendedPlaces = places;
-      emit(PlacesLoadedState(places));
+      emit(RecomandedLoadedState(places));
     }).catchError((error) {
-      emit(PlacesErrorState(error.toString()));
+      emit(RecomandedErrorState(error.toString()));
     });
   }
 }
