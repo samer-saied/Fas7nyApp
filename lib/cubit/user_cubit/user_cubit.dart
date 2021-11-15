@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:fas7ny/constants/strings.dart';
@@ -17,16 +18,29 @@ class UserCubit extends Cubit<UserState> {
   List<Place> favoritePlaces = [];
   User? currentUser;
 
-  void getUserData() {
+  void loginUser({required String userName, required String password}) {
     emit(UserLoadingState());
-    userRepository.loginUser(data: jsonEncode(userData)).then((user) {
+    userRepository
+        .loginUser(userName: userName, password: password)
+        .then((user) {
       currentUser = user;
+      print("-----------user -------" + currentUser.toString());
       emit(UserLoadedState(user));
     }).catchError((error) {
-      print(error.toString());
-      emit(UserErrorState(error));
+      emit(UserErrorState(error.toString()));
     });
   }
+
+  // void getUserData() {
+  //   emit(UserLoadingState());
+  //   userRepository.loginUser(data: jsonEncode(userData)).then((user) {
+  //     currentUser = user;
+  //     emit(UserLoadedState(user));
+  //   }).catchError((error) {
+  //     print(error.toString());
+  //     emit(UserErrorState(error));
+  //   });
+  // }
 
   void getFavourites() {
     emit(FavoriteLoadingState());

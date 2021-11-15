@@ -39,9 +39,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) => PlaceCubit(homeRepository),
         ),
         BlocProvider(
-          create: (context) => UserCubit(userRepository)
-            ..getUserData()
-            ..getFavourites(),
+          create: (context) => UserCubit(userRepository)..getFavourites(),
         ),
       ],
       child: MaterialApp(
@@ -49,10 +47,10 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: "Fas7ny",
         theme: ThemeData(textTheme: Constants.appThemes),
-        initialRoute: '/',
+        initialRoute: '/login',
         routes: {
-          '/': (context) => HomePage(),
-          '/login': (context) => const LoginPage(),
+          '/home': (context) => HomePage(),
+          '/login': (context) => LoginPage(),
         },
       ),
     );

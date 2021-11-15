@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fas7ny/components/shared_widgets.dart';
 import 'package:fas7ny/constants/my_colors.dart';
 import 'package:fas7ny/cubit/user_cubit/user_cubit.dart';
+import 'package:fas7ny/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,7 +27,9 @@ class EndDrawerAppPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        if (state is UserLoadedState) {
+        User user = BlocProvider.of<UserCubit>(context).currentUser!;
+
+        if (user.jwt.isNotEmpty) {
           return ListView(
             physics: const BouncingScrollPhysics(),
             children: [
@@ -41,14 +45,14 @@ class EndDrawerAppPage extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: DecorationImage(
                     fit: BoxFit.contain,
-                    image: NetworkImage(
-                      state.user.user.image.url,
+                    image: CachedNetworkImageProvider(
+                      user.user.image.url,
                     ),
                   ),
                 ),
               ),
               ListTile(
-                title: Text(state.user.user.username),
+                title: Text(user.user.username),
                 onTap: () {
                   // Update the state of the app
                   // ...
@@ -57,7 +61,16 @@ class EndDrawerAppPage extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: Text(state.user.user.mobile),
+                title: Text(user.user.email),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  //Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text(user.user.mobile),
                 onTap: () {
                   // Update the state of the app
                   // ...
@@ -68,6 +81,7 @@ class EndDrawerAppPage extends StatelessWidget {
               MaterialButton(
                   child: const Text("LogOut"),
                   onPressed: () {
+                    Navigator.pop(context);
                     Navigator.pushNamed(context, '/login');
                   })
             ],

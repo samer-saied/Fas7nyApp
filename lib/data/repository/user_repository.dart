@@ -10,8 +10,11 @@ class UserRepository {
 
   UserRepository(this.services);
 
-  Future<User> loginUser({required String data}) async {
-    final response = await services.loginUser(data: data);
+  Future<User> loginUser(
+      {required String userName, required String password}) async {
+    final response =
+        await services.loginUser(password: password, userName: userName);
+    print("--------------");
     dynamic user = jsonDecode(response);
     return User.fromJson(user);
   }

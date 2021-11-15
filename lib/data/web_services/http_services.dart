@@ -65,11 +65,12 @@ class HttpServices {
   }
 
 /////////////////       AUTH USER      ////////////////////////////
-  Future<String> loginUser({required String data}) async {
+  Future<String> loginUser(
+      {required String userName, required String password}) async {
     final response = await http.post(
       Uri.parse(baseUrl + 'auth/local'),
       headers: headersPost,
-      body: data,
+      body: jsonEncode({"identifier": userName, "password": password}),
     );
     print("---- Post ---- :" +
         "${Uri.parse(baseUrl + 'auth/local')}" +
@@ -77,9 +78,16 @@ class HttpServices {
         response.statusCode.toString());
 
     if (response.statusCode == 200) {
+      print(response.body);
       return response.body;
+    } else if (response.statusCode != 200) {
+      {
+        Map<String, dynamic> error =
+            jsonDecode(response.body) as Map<String, dynamic>;
+        throw (error["data"][0]["messages"][0]["message"]);
+      }
     } else {
-      throw Exception('Failed to load User Data');
+      throw ("Something gonna wrong on Login");
     }
   }
 }

@@ -5,6 +5,7 @@ class City {
   late String nameAr;
   late String nameEn;
   late String id;
+  String temp = "Not Available";
 
   City.fromJson(Map<String, dynamic> json) {
     image = Images.fromJson(json['image']);

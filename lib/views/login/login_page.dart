@@ -1,11 +1,17 @@
 import 'package:fas7ny/components/shared_widgets.dart';
 import 'package:fas7ny/constants/my_colors.dart';
+import 'package:fas7ny/cubit/user_cubit/user_cubit.dart';
 import 'package:fas7ny/views/home/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'Animation/fade_animation.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _userTextController = TextEditingController();
+  final TextEditingController _passTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +62,11 @@ class LoginPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            ///
+                            ///
+                            ///
+                            ///
+                            /////////////     Login Word    //////////////////////
                             const FadeAnimation(
                                 1.6,
                                 Text(
@@ -69,10 +80,15 @@ class LoginPage extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
+
+                            ///
+                            ///
+                            ///
+                            ///////////////////////   Form    ////////////////
                             FadeAnimation(
                                 1.8,
                                 Container(
-                                  padding: const EdgeInsets.all(5),
+                                  // padding: const EdgeInsets.all(5),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(10),
@@ -81,45 +97,100 @@ class LoginPage extends StatelessWidget {
                                             color: MyColors.myMainColor
                                                 .withOpacity(0.20),
                                             blurRadius: 20.0,
-                                            offset: Offset(0, 10))
+                                            offset: const Offset(0, 7))
                                       ]),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        padding: const EdgeInsets.all(8.0),
-                                        decoration: const BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color: Colors.grey))),
-                                        child: TextField(
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              hintText: "Email or Phone number",
-                                              hintStyle: TextStyle(
-                                                  color: Colors.grey[400])),
+                                  child: Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      children: <Widget>[
+                                        ///
+                                        ///
+                                        ///
+                                        ////////////   UserName Field ////////////////
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5.0, horizontal: 10.0),
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Colors.grey))),
+                                          child: Center(
+                                            child: TextFormField(
+                                              cursorColor: MyColors.myMainColor,
+                                              cursorHeight: 25,
+                                              maxLines: 1,
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                color: MyColors.myblack,
+                                              ),
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              validator: userNameValidateFunc,
+                                              controller: _userTextController,
+                                              decoration: InputDecoration(
+                                                  errorStyle: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.red),
+                                                  border: InputBorder.none,
+                                                  hintText:
+                                                      "Email or Phone number",
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey[400])),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TextField(
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              hintText: "Password",
-                                              hintStyle: TextStyle(
-                                                  color: Colors.grey[400])),
-                                        ),
-                                      )
-                                    ],
+
+                                        ///
+                                        ///
+                                        ///
+                                        ////////////   Password Field ////////////////
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5.0, horizontal: 10.0),
+                                          child: TextFormField(
+                                            cursorColor: MyColors.myMainColor,
+                                            cursorHeight: 25,
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              color: MyColors.myblack,
+                                            ),
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                            validator: passwordValidateFunc,
+                                            controller: _passTextController,
+                                            obscureText: true,
+                                            decoration: InputDecoration(
+                                                errorStyle: const TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.red),
+                                                border: InputBorder.none,
+                                                hintText: "Password",
+                                                hintStyle: TextStyle(
+                                                    color: Colors.grey[400])),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 )),
                             const SizedBox(
                               height: 30,
                             ),
+                            //////////////////////  login button   /////////////////////
+
                             GestureDetector(
                               onTap: () {
+                                FocusScope.of(context).unfocus();
+                                if (_formKey.currentState!.validate()) {
+                                  BlocProvider.of<UserCubit>(context).loginUser(
+                                      userName: _userTextController.text.trim(),
+                                      password: _passTextController.text);
+                                }
+
                                 ////////////////   Login  ///////////////
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, '/', (route) => false);
+                                // Navigator.pushNamedAndRemoveUntil(
+                                //     context, '/home', (route) => false);
                               },
                               child: FadeAnimation(
                                   2,
@@ -127,30 +198,61 @@ class LoginPage extends StatelessWidget {
                                     height: 50,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      gradient: const LinearGradient(
+                                      gradient: LinearGradient(
                                         colors: [
-                                          MyColors.mylightpink,
+                                          MyColors.myMainColor
+                                              .withOpacity(0.40),
                                           MyColors.myMainColor,
                                         ],
                                         begin: Alignment.bottomRight,
-                                        end: Alignment(0.2, 0.0),
+                                        end: const Alignment(.01, 0),
                                       ),
                                     ),
-                                    child: const Center(
-                                      child: Text(
+                                    child: Center(
+                                        child:
+                                            BlocConsumer<UserCubit, UserState>(
+                                                listener: (context, state) {
+                                      if (state is UserLoadedState) {
+                                        Navigator.pushReplacementNamed(
+                                            context, '/home');
+                                      }
+                                    }, builder: (context, state) {
+                                      if (state is UserLoadingState) {
+                                        return const Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(10.0),
+                                            child: CircularProgressIndicator(
+                                              color: MyColors.myWhite,
+                                            ),
+                                          ),
+                                        );
+                                      } else if (state is UserErrorState) {
+                                        Fluttertoast.showToast(
+                                            msg: state.error,
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                                MyColors.myMainColor,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+
+                                      return const Text(
                                         "Login",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
                                             letterSpacing: 1.25,
                                             fontWeight: FontWeight.normal),
-                                      ),
-                                    ),
+                                      );
+                                    })),
                                   )),
                             ),
                             const SizedBox(
                               height: 70,
                             ),
+                            //////////////////////  Don't have account   /////////////////////
                             const FadeAnimation(
                                 1.5,
                                 Center(
@@ -173,5 +275,26 @@ class LoginPage extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  String? userNameValidateFunc(value) {
+    Pattern pattern =
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+        r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+        r"{0,253}[a-zA-Z0-9])?)*$";
+    RegExp regex = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    if (!regex.hasMatch(value) || value == null || value.isEmpty) {
+      return 'Correct Email is required';
+    } else {
+      return null;
+    }
+  }
+
+  String? passwordValidateFunc(value) {
+    if (value == null || value.isEmpty || value.length < 6) {
+      return 'Must be more then 6 character';
+    }
+    return null;
   }
 }

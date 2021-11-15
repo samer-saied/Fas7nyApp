@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:fas7ny/components/shared_widgets.dart';
 import 'package:fas7ny/constants/my_colors.dart';
 import 'package:fas7ny/cubit/home_cubit/home_cubit.dart';
 import 'package:fas7ny/cubit/home_cubit/home_state.dart';
+import 'package:fas7ny/data/web_services/weather.dart';
 import 'package:fas7ny/models/city_model.dart';
 import 'package:fas7ny/views/places_for_city/places_for_city.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CitiesWidget extends StatelessWidget {
   const CitiesWidget({Key? key}) : super(key: key);
@@ -83,6 +82,9 @@ class CityCardWidget extends StatelessWidget {
         },
         child: Stack(
           children: [
+            ///
+            ///
+            //////////////    Image  /////////////
             Container(
               clipBehavior: Clip.antiAlias,
               height: 150,
@@ -110,6 +112,59 @@ class CityCardWidget extends StatelessWidget {
                     bottomLeft: Radius.circular(10.0)),
               ),
             ),
+
+            ///
+            ///
+            //////////////    Temp & Icon  /////////////
+            Positioned(
+              right: 0,
+              top: 0,
+              child: FutureBuilder(
+                future: WeatherServices().getCurrentWeather(city.nameEn.trim()),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  } else {
+                    Map<String, dynamic> data =
+                        snapshot.data as Map<String, dynamic>;
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: MyColors.myDarkGrey.withOpacity(.70),
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(10.0)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Row(
+                            children: [
+                              data["icon"] != null
+                                  ? CachedNetworkImage(
+                                      imageUrl: imgTempIconUrl +
+                                          data["icon"] +
+                                          ".png",
+                                      height: 25,
+                                    )
+                                  : const Icon(
+                                      Icons.bubble_chart,
+                                      color: Colors.white,
+                                    ),
+                              getTempWidget(data["temp"]),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+
+            ///
+            ///
+            //////////////    Name of City  /////////////
             Positioned(
               bottom: 0,
               left: 0,
@@ -141,5 +196,17 @@ class CityCardWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget getTempWidget(temp) {
+    if (temp != null) {
+      if (double.parse(temp.toString()) > 0.0) {
+        return Text(
+          temp.toStringAsFixed(0) + " °C",
+          style: const TextStyle(color: Colors.white),
+        );
+      }
+    }
+    return const Text("");
   }
 }

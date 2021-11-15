@@ -1,12 +1,14 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fas7ny/constants/my_colors.dart';
+import 'package:fas7ny/cubit/user_cubit/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TitleWidget extends StatelessWidget {
   final String titleName;
   const TitleWidget({Key? key, required this.titleName}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,7 +30,7 @@ class CircleLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
         child: CircularProgressIndicator(
       color: MyColors.myMainColor,
     ));
@@ -43,14 +45,44 @@ class AppLogoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      systemOverlayStyle:
-          const SystemUiOverlayStyle(statusBarColor: MyColors.myMainColor),
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarColor: MyColors.myMainColor,
+      ),
       iconTheme: const IconThemeData(color: MyColors.myMainColor),
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: const Fas7nyWordWidget(
         fontSize: 30,
       ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: InkWell(
+            onTap: () {
+              Scaffold.of(context).openEndDrawer();
+            },
+            borderRadius: const BorderRadius.all(Radius.circular(30)),
+            child: Container(
+              //  height: 30,
+              width: 35,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: MyColors.myGrey,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: CachedNetworkImageProvider(
+                    BlocProvider.of<UserCubit>(context)
+                        .currentUser!
+                        .user
+                        .image
+                        .url,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

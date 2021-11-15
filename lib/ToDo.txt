@@ -1,8 +1,8 @@
-add fav   part 2
+add fav   part 2 check duplicate item on fav
 splash screen
 moods
 redesign yalla now
 login screen pyramids stack at keyboard
-
+update temp func
 
 suggestted change ui listtitle + Press City when Places on OneCity 

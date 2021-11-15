@@ -1,6 +1,8 @@
 import 'package:fas7ny/constants/my_colors.dart';
+import 'package:fas7ny/cubit/user_cubit/user_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GFListTile extends StatelessWidget {
   /// Creates ListTile with leading, title, trailing, image widget for almost every type of ListTile design.
@@ -128,7 +130,7 @@ class GFListTile extends StatelessWidget {
                         titleText != null
                             ? Text(
                                 titleText!,
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w500,
                                     color: MyColors.myMainColor),

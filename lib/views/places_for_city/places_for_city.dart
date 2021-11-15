@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fas7ny/components/list_tiles.dart';
 import 'package:fas7ny/components/shared_widgets.dart';
@@ -19,10 +21,12 @@ class PlacesForCity extends StatelessWidget {
         .getPlacesForCity(cityName: cityName);
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: MyColors.myMainColor,
-          statusBarIconBrightness: Brightness.light,
-        ),
+        systemOverlayStyle: Platform.isIOS
+            ? SystemUiOverlayStyle.light
+            : const SystemUiOverlayStyle(
+                statusBarColor: MyColors.myMainColor,
+                statusBarIconBrightness: Brightness.light,
+              ),
         iconTheme: const IconThemeData(color: MyColors.myWhite),
         title: Text(cityName),
         backgroundColor: MyColors.myMainColor,
