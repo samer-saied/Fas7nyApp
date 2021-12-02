@@ -108,7 +108,20 @@ class PlaceDataWidget extends StatelessWidget {
             "Time To Visit",
             style: Theme.of(context).textTheme.caption,
           ),
-          Container(
+          // Container(
+          //     width: 250,
+          //     height: 75,
+          //     child: DayTime(
+          //       hour: 6,
+          //       displace: .5,
+          //       moonAsset: const Image(
+          //         image: AssetImage("assets/images/moon.png"),
+          //       ),
+          //       sunAsset: const Image(
+          //         image: AssetImage("assets/images/sun.png"),
+          //       ),
+          //     )),
+          SizedBox(
             height: 17,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,

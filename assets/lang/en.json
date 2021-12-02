@@ -1,0 +1,10 @@
+{
+    "login" : "login",
+    "register" : "register",
+    "registerby" : "Register by",
+    "BacktoLogin" :"Back to Login",
+    "Create new account" :"Create new account ➜",
+    "Please fill form": "Please fill form ..",
+    "don't have account":"don't have account"
+}
+

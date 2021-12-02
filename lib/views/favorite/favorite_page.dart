@@ -2,28 +2,39 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fas7ny/components/list_tiles.dart';
 import 'package:fas7ny/components/shared_widgets.dart';
 import 'package:fas7ny/constants/my_colors.dart';
-import 'package:fas7ny/cubit/user_cubit/user_cubit.dart';
+import 'package:fas7ny/cubit/fav_cubit/fav_cubit.dart';
+import 'package:fas7ny/cubit/fav_cubit/fav_state.dart';
 import 'package:fas7ny/models/place_model.dart';
 import 'package:fas7ny/views/details/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FavoritePage extends StatelessWidget {
+class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);
 
   @override
+  State<FavoritePage> createState() => _FavoritePageState();
+}
+
+class _FavoritePageState extends State<FavoritePage> {
+  @override
+  void initState() {
+    BlocProvider.of<FavCubit>(context).getFavourites();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    BlocProvider.of<UserCubit>(context).getFavourites();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Favorites"),
         backgroundColor: MyColors.myMainColor,
       ),
-      body: BlocBuilder<UserCubit, UserState>(
+      body: BlocBuilder<FavCubit, FavState>(
         builder: (context, state) {
           List<Place> favoritePlaces =
-              BlocProvider.of<UserCubit>(context).favoritePlaces;
-          if (favoritePlaces.isNotEmpty) {
+              BlocProvider.of<FavCubit>(context).favoritePlaces;
+          if (state is FavoriteLoadedState && favoritePlaces.isNotEmpty) {
             return FavPlaceWidget(
               favoritePlaces: favoritePlaces,
             );
@@ -47,9 +58,9 @@ class FavoritePage extends StatelessWidget {
                 const Text("Add favourite places to see here"),
                 MaterialButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/');
+                    Navigator.pushReplacementNamed(context, '/home');
                   },
-                  child: Text("Explore"),
+                  child: const Text("Explore"),
                 )
               ],
             ),
@@ -81,8 +92,8 @@ class FavPlaceWidget extends StatelessWidget {
               return Dismissible(
                 key: Key(favoritePlaces[index].id),
                 onDismissed: (direction) {
-                  BlocProvider.of<UserCubit>(context)
-                      .deleteFavourite(favoritePlaces[index]);
+                  BlocProvider.of<FavCubit>(context)
+                      .updateFavourites(favoritePlaces[index]);
 
                   getSnackBar(context, 'Place deleted successfully.');
                 },

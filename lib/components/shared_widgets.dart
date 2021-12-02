@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fas7ny/constants/my_colors.dart';
 import 'package:fas7ny/cubit/user_cubit/user_cubit.dart';
@@ -30,7 +31,7 @@ class CircleLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
         child: CircularProgressIndicator(
       color: MyColors.myMainColor,
     ));
@@ -58,30 +59,40 @@ class AppLogoWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: InkWell(
-            onTap: () {
-              Scaffold.of(context).openEndDrawer();
-            },
-            borderRadius: const BorderRadius.all(Radius.circular(30)),
-            child: Container(
-              //  height: 30,
-              width: 35,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: MyColors.myGrey,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: CachedNetworkImageProvider(
-                    BlocProvider.of<UserCubit>(context)
-                        .currentUser!
-                        .user
-                        .image
-                        .url,
+              onTap: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
+              child:
+                  BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+                if (BlocProvider.of<UserCubit>(context).currentUser!.image !=
+                    null) {
+                  return Container(
+                      width: 35,
+                      clipBehavior: Clip.antiAlias,
+                      child: CachedNetworkImage(
+                        imageUrl: BlocProvider.of<UserCubit>(context)
+                            .currentUser!
+                            .image!
+                            .url,
+                      ),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: MyColors.myGrey,
+                      ));
+                }
+                return Container(
+                  width: 35,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: MyColors.myGrey,
+                    image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: AssetImage("assets/images/person.png")),
                   ),
-                ),
-              ),
-            ),
-          ),
-        ),
+                );
+              })),
+        )
       ],
     );
   }
@@ -152,4 +163,39 @@ getSnackBar(BuildContext context, String msgTxt) {
       backgroundColor: MyColors.myMainColor,
     ),
   );
+}
+
+showAlertDialog(BuildContext context, String msgTxt, Function okPressBtn) {
+  return AwesomeDialog(
+    context: context,
+    dialogType: DialogType.NO_HEADER,
+    animType: AnimType.BOTTOMSLIDE,
+    title: 'Error',
+    desc: msgTxt,
+    btnOkOnPress: okPressBtn,
+    btnOkColor: MyColors.myMainColor,
+  ).show();
+}
+
+/////////////////////////// Social Button ///////////////////////////////////
+class SocialIconWidget extends StatelessWidget {
+  final Function() ontapFunc;
+  final String socialName;
+  const SocialIconWidget(
+      {Key? key, required this.socialName, required this.ontapFunc})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: SizedBox(
+        width: 40,
+        height: 40,
+        child: Image(
+          image: AssetImage("assets/images/social/$socialName.png"),
+        ),
+      ),
+      onTap: ontapFunc,
+    );
+  }
 }

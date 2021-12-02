@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fas7ny/components/list_tiles.dart';
 import 'package:fas7ny/components/shared_widgets.dart';
@@ -8,10 +9,9 @@ import 'package:fas7ny/data/web_services/http_services.dart';
 import 'package:fas7ny/views/details/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({Key? key}) : super(key: key);
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -68,14 +68,16 @@ class _SearchPageState extends State<SearchPage> {
                 controller: textEditingController,
                 onFieldSubmitted: (value) {
                   if (value.isEmpty || value.length <= 3) {
-                    Fluttertoast.showToast(
-                        msg: 'Minimim lengh Four caracter',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: MyColors.myMainColor,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.INFO,
+                      animType: AnimType.BOTTOMSLIDE,
+                      title: 'Dialog Title',
+                      desc: 'Minimim lengh Four caracter',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {},
+                    ).show();
+
                     textEditingController.clear();
                   } else {
                     BlocProvider.of<SearchCubit>(context)
@@ -90,12 +92,12 @@ class _SearchPageState extends State<SearchPage> {
             ///////////////////////////////////////////////////////////////////////////
             body: BlocConsumer<SearchCubit, SearchState>(
               listener: (context, state) {
-                // TODO: implement listener
+                //////////////////////  implement listener
               },
               builder: (context, state) {
                 if (state is SearchLoadedState) {
                   if (state.searchedPlaces.isEmpty ||
-                      state.searchedPlaces.length == 0) {
+                      state.searchedPlaces.isEmpty) {
                     return Center(
                       child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
@@ -175,7 +177,7 @@ class _SearchPageState extends State<SearchPage> {
                   //   child: Image.asset("assets/images/831.gif"),
                   // );
 
-                  return CircleLoadingWidget();
+                  return const CircleLoadingWidget();
                 }
                 return Center(
                     child: Image.asset(

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:fas7ny/components/shared_widgets.dart';
@@ -8,7 +9,6 @@ import 'package:fas7ny/views/details/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CarouselWidget extends StatelessWidget {
   const CarouselWidget({Key? key}) : super(key: key);
@@ -20,14 +20,15 @@ class CarouselWidget extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
         if (state is BannerErrorState) {
-          Fluttertoast.showToast(
-              msg: "Banners can't load, Something gonna Wrong... 😔",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: MyColors.myWhite,
-              textColor: MyColors.myMainColor,
-              fontSize: 16.0);
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.INFO,
+            animType: AnimType.BOTTOMSLIDE,
+            title: state.error,
+            desc: "Banners can't load, Something gonna Wrong... 😔",
+            btnCancelOnPress: () {},
+            btnOkOnPress: () {},
+          ).show();
         }
       },
       builder: (context, state) {

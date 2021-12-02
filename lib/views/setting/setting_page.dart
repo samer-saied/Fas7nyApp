@@ -1,14 +1,43 @@
 import 'package:fas7ny/components/shared_widgets.dart';
 import 'package:fas7ny/constants/my_colors.dart';
+import 'package:fas7ny/data/local/restart.dart';
+import 'package:fas7ny/data/local/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
+
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
+  String _selectedLang = 'en';
+
+  @override
+  initState() {
+    super.initState();
+
+    //////////  Check langauage on sharedpre if null it will be "en" else user selected ///////////////
+    SharedSetting().getSetting("language").then((langValue) {
+      if (langValue!.isEmpty && langValue == "empty") {
+        setState(() {
+          _selectedLang = "en";
+        });
+      } else {
+        setState(() {
+          _selectedLang = langValue;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     Color pickerColor = MyColors.myMainColor;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Setting"),
@@ -25,24 +54,49 @@ class SettingPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 padding: const EdgeInsets.all(10.0),
-                child: Column(
+                child: Row(
                   children: [
                     const TitleWidget(titleName: "Langauge"),
+                    const Spacer(),
                     Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.only(right: 8.0),
                       child: DropdownButton(
-                          isExpanded: true,
+                          isExpanded: false,
                           style: const TextStyle(color: Colors.black),
-                          onChanged: (String? newValue) {},
-                          value: "English",
+                          onChanged: (String? newValue) {
+                            SharedSetting()
+                                .setSetting("language", newValue.toString());
+                            setState(() {
+                              _selectedLang = newValue ?? 'en';
+                            });
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.NO_HEADER,
+                              animType: AnimType.BOTTOMSLIDE,
+                              title: 'Warning',
+                              desc:
+                                  'Change Language will be appled after restart application',
+                              btnOkOnPress: () {},
+                            ).show();
+                            RestartWidget.restartApp(context);
+                          },
+                          value: _selectedLang,
                           items: const <DropdownMenuItem<String>>[
                             DropdownMenuItem<String>(
-                              value: "English",
+                              value: "en",
                               child: Text("English"),
                             ),
                             DropdownMenuItem(
-                              value: "Arabic",
+                              value: "ar",
                               child: Text("Arabic"),
+                            ),
+                            DropdownMenuItem(
+                              value: "es",
+                              child: Text("Spanish"),
+                            ),
+                            DropdownMenuItem(
+                              value: "ru",
+                              child: Text("Russian"),
                             )
                           ]),
                     ),
@@ -87,7 +141,8 @@ class SettingPage extends StatelessWidget {
                       paletteType: PaletteType.rgb,
                       pickerAreaHeightPercent: 0.0,
                     ),
-                    ElevatedButton(onPressed: () {}, child: Text("submit")),
+                    ElevatedButton(
+                        onPressed: () {}, child: const Text("submit")),
                     const SizedBox(
                       height: 5,
                     )

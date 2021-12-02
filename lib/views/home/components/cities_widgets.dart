@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fas7ny/components/shared_widgets.dart';
 import 'package:fas7ny/constants/my_colors.dart';
@@ -8,7 +9,6 @@ import 'package:fas7ny/models/city_model.dart';
 import 'package:fas7ny/views/places_for_city/places_for_city.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CitiesWidget extends StatelessWidget {
   const CitiesWidget({Key? key}) : super(key: key);
@@ -19,14 +19,15 @@ class CitiesWidget extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
         if (state is CityErrorState) {
-          Fluttertoast.showToast(
-              msg: "Cities can't load, Check Internet Connection ... 🔗",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: MyColors.myWhite,
-              textColor: MyColors.myMainColor,
-              fontSize: 16.0);
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.INFO,
+            animType: AnimType.BOTTOMSLIDE,
+            title: 'Dialog Title',
+            desc: "Cities can't load, Check Internet Connection ... 🔗",
+            btnCancelOnPress: () {},
+            btnOkOnPress: () {},
+          ).show();
         }
       },
       builder: (context, state) {

@@ -1,103 +1,66 @@
-import 'dart:convert';
-import 'dart:ui';
-
 import 'package:bloc/bloc.dart';
-import 'package:fas7ny/constants/strings.dart';
+import 'package:fas7ny/data/local/shared.dart';
+import 'package:fas7ny/data/repository/fav_repository.dart';
 import 'package:fas7ny/data/repository/user_repository.dart';
 import 'package:fas7ny/models/place_model.dart';
 import 'package:fas7ny/models/user_model.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 part 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
   UserRepository userRepository;
+  FavRepository favRepository;
 
-  UserCubit(this.userRepository) : super(UserInitial());
+  UserCubit(this.userRepository, this.favRepository) : super(UserInitial());
 
-  List<Place> favoritePlaces = [];
-  User? currentUser;
+  UserData? currentUser;
 
   void loginUser({required String userName, required String password}) {
-    emit(UserLoadingState());
+    emit(UserLoadingByLoginState());
     userRepository
         .loginUser(userName: userName, password: password)
         .then((user) {
-      currentUser = user;
-      print("-----------user -------" + currentUser.toString());
-      emit(UserLoadedState(user));
+      SharedSetting().setSetting("user", user.jwt);
+      currentUser = user.user;
+      emit(UserLoadedByLoginState(user));
     }).catchError((error) {
-      emit(UserErrorState(error.toString()));
+      emit(UserErrorLoginState(error.toString()));
     });
   }
 
-  // void getUserData() {
-  //   emit(UserLoadingState());
-  //   userRepository.loginUser(data: jsonEncode(userData)).then((user) {
-  //     currentUser = user;
-  //     emit(UserLoadedState(user));
-  //   }).catchError((error) {
-  //     print(error.toString());
-  //     emit(UserErrorState(error));
-  //   });
-  // }
+  void registerUser({required UserData user, required String password}) {
+    emit(UserLoadingByRegisterState());
+    userRepository
+        .registerUser(userdata: user.toJson(), passworddata: password)
+        .then((user) {
+      SharedSetting().setSetting("user", user.jwt);
+      SharedSetting().setSetting("userID", user.user.id);
 
-  void getFavourites() {
-    emit(FavoriteLoadingState());
-    if (favoritePlaces.isNotEmpty) {
-      emit(FavoriteLoadedState(favoritePlaces));
-      return;
-    } else {
-      userRepository.getFavorites().then((favPlaces) {
-        favoritePlaces = favPlaces;
-        emit(FavoriteLoadedState(favoritePlaces));
-      }).catchError((error) {
-        emit(FavoriteErrorState(error.toString()));
+      currentUser = user.user;
+      favRepository.createFav(userID: user.user.id).then((value) {
+        SharedSetting().setSetting("favID", value);
+        print(value);
+        ///////////////////////////////////
+        emit(UserRegisteredState());
       });
-    }
-  }
-
-  void deleteFavourite(Place deletedPlace) {
-    emit(FavoriteLoadingState());
-    favoritePlaces.remove(deletedPlace);
-    var data = {
-      "places": favoritePlaces.map((e) => {"_id": e.id}).toList(),
-      "users_permissions_user": {"_id": "$userID"}
-    };
-    userRepository.deleteFavorites(data).then((favPlaces) {
-      favoritePlaces = favPlaces;
-      emit(FavoriteLoadedState(favPlaces));
+      return user;
     }).catchError((error) {
-      print(error.toString());
-      emit(FavoriteErrorState(error.toString()));
+      emit(UserErrorRegisterState(error.toString()));
     });
   }
 
-  void addFavourites(Place addPlace) {
-    emit(FavoriteLoadingState());
-    if (!checkFavourites(addPlace.id)) {
-      favoritePlaces.add(addPlace);
-      var data = {
-        "places": favoritePlaces.map((e) => {"_id": e.id}).toList(),
-        "users_permissions_user": {"_id": "$userID"}
-      };
-      userRepository.updateFavorites(data).then((favPlaces) {
-        favoritePlaces = favPlaces;
-        emit(FavoriteLoadedState(favPlaces));
-      }).catchError((error) {
-        print(error.toString());
-        emit(FavoriteErrorState(error.toString()));
-      });
-    }
-  }
-
-  bool checkFavourites(String placeID) {
-    emit(FavoriteAddLoadingState());
-    for (var favPlace in favoritePlaces) {
-      emit(FavoriteAddedState());
-      return favPlace.id == placeID;
-    }
-    emit(FavoriteAddedState());
-    return false;
+  void getUserData() {
+    emit(UserLoadingAutoState());
+    userRepository.checkTokenUser().then((user) {
+      if (user != null) {
+        currentUser = user;
+        emit(UserLoadedAutoState(user));
+      }
+    }).catchError((error) {
+      print("----------Error---4---------------");
+      emit(UserErrorAutoState(error.toString()));
+    });
   }
 }

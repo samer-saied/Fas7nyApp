@@ -1,10 +1,10 @@
 import 'package:fas7ny/components/shared_widgets.dart';
 import 'package:fas7ny/constants/my_colors.dart';
 import 'package:fas7ny/cubit/user_cubit/user_cubit.dart';
-import 'package:fas7ny/views/home/home_page.dart';
+import 'package:fas7ny/data/lang/applocal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'Animation/fade_animation.dart';
 
 class LoginPage extends StatelessWidget {
@@ -16,50 +16,78 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
-    return Scaffold(
-        backgroundColor: MyColors.myWhite,
-        body: SafeArea(
+    print(AppLocale.of(context).locale);
+    return Stack(children: [
+      ///////////////////// BackGround Image ////////////////////////////
+      Container(
+        height: mediaSize.height,
+        width: mediaSize.width,
+        color: MyColors.mySlaveColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: const [
+            FadeAnimation(
+              2.0,
+              Image(
+                image: AssetImage("assets/images/backGoundLayer.png"),
+              ),
+            )
+          ],
+        ),
+      ),
+
+      ///////////////////// Main Screen ////////////////////////////
+
+      Positioned(
+          child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
           child: SizedBox(
-            width: mediaSize.width,
             height: mediaSize.height,
-            child: Stack(
-              children: [
-                Positioned(
-                  bottom: -90,
-                  right: 0,
-                  child: FadeAnimation(
-                    1.5,
-                    Container(
-                      width: 250,
-                      height: 250,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/pyramids.png'),
-                        ),
-                      ),
-                    ),
+            width: mediaSize.width,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 70,
                   ),
-                ),
-                SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      const Fas7nyWordWidget(
-                        fontSize: 36,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const AnimatedTextWidget(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Column(
+                  ////////////////////// Fas7ny Word ////////////////////////
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(
+                  //       horizontal: mediaSize.width * 0.30),
+                  //   child: const Image(
+                  //       image: AssetImage("assets/images/fas7ny.png")),
+                  // ),
+                  const Text(
+                    "فسحني",
+                    style: TextStyle(
+                        fontFamily: 'Kufam',
+                        fontSize: 60,
+                        fontWeight: FontWeight.normal,
+                        color: MyColors.myMainColor),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: BlocBuilder<UserCubit, UserState>(
+                      builder: (context, state) {
+                        if (state is UserLoadingAutoState) {
+                          return SizedBox(
+                            width: mediaSize.width,
+                            height: mediaSize.height / 3,
+                            child: const Center(
+                              child: CircleLoadingWidget(),
+                            ),
+                          );
+                        }
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             ///
@@ -67,11 +95,11 @@ class LoginPage extends StatelessWidget {
                             ///
                             ///
                             /////////////     Login Word    //////////////////////
-                            const FadeAnimation(
+                            FadeAnimation(
                                 1.6,
                                 Text(
-                                  "Login ",
-                                  style: TextStyle(
+                                  "${getLang(context, "login")}",
+                                  style: const TextStyle(
                                       color: MyColors.myMainColor,
                                       fontFamily: 'Ubuntu',
                                       fontSize: 30,
@@ -177,7 +205,7 @@ class LoginPage extends StatelessWidget {
                             const SizedBox(
                               height: 30,
                             ),
-                            //////////////////////  login button   /////////////////////
+                            //////////////////////  Login button   /////////////////////
 
                             GestureDetector(
                               onTap: () {
@@ -187,10 +215,6 @@ class LoginPage extends StatelessWidget {
                                       userName: _userTextController.text.trim(),
                                       password: _passTextController.text);
                                 }
-
-                                ////////////////   Login  ///////////////
-                                // Navigator.pushNamedAndRemoveUntil(
-                                //     context, '/home', (route) => false);
                               },
                               child: FadeAnimation(
                                   2,
@@ -198,26 +222,28 @@ class LoginPage extends StatelessWidget {
                                     height: 50,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      gradient: LinearGradient(
+                                      gradient: const LinearGradient(
                                         colors: [
-                                          MyColors.myMainColor
-                                              .withOpacity(0.40),
+                                          MyColors.mySlaveColor,
                                           MyColors.myMainColor,
                                         ],
                                         begin: Alignment.bottomRight,
-                                        end: const Alignment(.01, 0),
+                                        end: Alignment(.01, 0),
                                       ),
                                     ),
                                     child: Center(
                                         child:
                                             BlocConsumer<UserCubit, UserState>(
                                                 listener: (context, state) {
-                                      if (state is UserLoadedState) {
+                                      if (state is UserLoadedByLoginState) {
                                         Navigator.pushReplacementNamed(
                                             context, '/home');
+                                      } else if (state is UserErrorLoginState) {
+                                        showAlertDialog(
+                                            context, state.error, () {});
                                       }
                                     }, builder: (context, state) {
-                                      if (state is UserLoadingState) {
+                                      if (state is UserLoadingByLoginState) {
                                         return const Center(
                                           child: Padding(
                                             padding: EdgeInsets.all(10.0),
@@ -226,21 +252,11 @@ class LoginPage extends StatelessWidget {
                                             ),
                                           ),
                                         );
-                                      } else if (state is UserErrorState) {
-                                        Fluttertoast.showToast(
-                                            msg: state.error,
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor:
-                                                MyColors.myMainColor,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
                                       }
 
-                                      return const Text(
-                                        "Login",
-                                        style: TextStyle(
+                                      return Text(
+                                        "${getLang(context, "login")}",
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
                                             letterSpacing: 1.25,
@@ -249,32 +265,116 @@ class LoginPage extends StatelessWidget {
                                     })),
                                   )),
                             ),
+                            ///////////////////////   Or   ///////////////////////
+                            FadeAnimation(
+                              1.7,
+                              Center(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 1,
+                                      width: 50,
+                                      color: MyColors.myMainColor,
+                                    ),
+                                    const Text(
+                                      "   Or   ",
+                                      style: TextStyle(
+                                          color: MyColors.myMainColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      width: 50,
+                                      color: MyColors.myMainColor,
+                                    ),
+                                  ],
+                                ),
+                              )),
+                            ),
+
+                            ///////////////////////  Social Icons    ///////////////////////
+                            FadeAnimation(
+                              1.6,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SocialIconWidget(
+                                    socialName: 'apple',
+                                    ontapFunc: () {
+                                      showAlertDialog(
+                                          context,
+                                          "Apple sign in Not available now ",
+                                          () {});
+                                    },
+                                  ),
+                                  SocialIconWidget(
+                                    socialName: 'facebook',
+                                    ontapFunc: () {
+                                      showAlertDialog(
+                                          context,
+                                          "Facebook sign in is Not available now ",
+                                          () {});
+                                    },
+                                  ),
+                                  SocialIconWidget(
+                                    socialName: 'google',
+                                    ontapFunc: () {
+                                      showAlertDialog(
+                                          context,
+                                          "Google sign in is Not available now ",
+                                          () {});
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
                             const SizedBox(
-                              height: 70,
+                              height: 25,
+                            ),
+
+                            const SizedBox(
+                              height: 15,
                             ),
                             //////////////////////  Don't have account   /////////////////////
-                            const FadeAnimation(
-                                1.5,
+                            FadeAnimation(
+                                1.9,
                                 Center(
-                                  child: Text(
-                                    "Don't have account?",
-                                    style:
-                                        TextStyle(color: MyColors.myMainColor),
+                                  child: InkWell(
+                                    child: Text(
+                                      "${getLang(context, "Create new account")}",
+                                      style: MediaQuery.of(context)
+                                                  .orientation ==
+                                              Orientation.landscape
+                                          ? const TextStyle(color: Colors.white)
+                                          : const TextStyle(
+                                              color: MyColors.myMainColor),
+                                    ),
+                                    onTap: () {
+                                      Navigator.pushNamed(context, '/register');
+                                    },
                                   ),
                                 )),
+
+                            const SizedBox(
+                              height: 50,
+                            ),
                           ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 50,
-                      ),
-                    ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ));
+        ),
+      ))
+    ]);
   }
 
   String? userNameValidateFunc(value) {

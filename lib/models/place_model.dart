@@ -1,4 +1,3 @@
-import 'package:fas7ny/models/city_model.dart';
 import 'package:fas7ny/models/images_model.dart';
 
 class Place {

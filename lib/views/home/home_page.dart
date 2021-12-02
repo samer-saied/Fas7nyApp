@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
   int activeIndex = 0;
   final List<Widget> _widgets = [
     const HomeWidgets(),
-    SearchPage(),
+    const SearchPage(),
     const FavoritePage(),
     const SettingPage(),
   ];

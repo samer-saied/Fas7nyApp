@@ -19,7 +19,9 @@ class DetailsPlacePage extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<PlaceCubit>(context).getPlace(placeId: placeId);
     var favCubit = BlocProvider.of<UserCubit>(context);
-    bool isFav = favCubit.checkFavourites(placeId);
+    bool isFav = true;
+
+    //bool isFav = favCubit.checkFavourites(placeId);
     return Scaffold(
       backgroundColor: MyColors.myWhite,
       body: BlocBuilder<PlaceCubit, PlaceState>(
@@ -84,10 +86,10 @@ class DetailsPlacePage extends StatelessWidget {
                               return TextButton(
                                 onPressed: () {
                                   if (isFav) {
-                                    favCubit.deleteFavourite(place);
+                                    //   favCubit.deleteFavourite(place);
                                     isFav = !isFav;
                                   } else {
-                                    favCubit.addFavourites(place);
+                                    //      favCubit.addFavourites(place);
                                     isFav = !isFav;
                                   }
 

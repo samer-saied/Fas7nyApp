@@ -4,14 +4,14 @@ import '../../constants/strings.dart';
 class DioServices {
   late Dio dio;
 
-  Services() {
+  services() {
     BaseOptions options = BaseOptions(
       baseUrl: baseUrl,
       receiveDataWhenStatusError: true,
       connectTimeout: 60 * 1000, // 60 seconds,
       receiveTimeout: 60 * 1000,
       headers: {
-        "authorization": token,
+        "authorization": 'token',
       },
     );
 

@@ -19,6 +19,5 @@ class PlaceCubit extends Cubit<PlaceState> {
     }).catchError((error) {
       emit(PlaceErrorState(error.toString()));
     });
-    ;
   }
 }
