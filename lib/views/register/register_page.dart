@@ -66,14 +66,15 @@ class RegisterPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   const SizedBox(
-                    height: 50,
+                    height: 40,
                   ),
-                  Image.asset(
-                    "assets/images/register.png",
-                    height: 60,
+                  const Icon(
+                    Icons.person_add,
+                    color: MyColors.myMainColor,
+                    size: 50,
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
