@@ -3,7 +3,6 @@ import 'package:fas7ny/constants/my_colors.dart';
 import 'package:fas7ny/data/local/restart.dart';
 import 'package:fas7ny/data/local/shared.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class SettingPage extends StatefulWidget {
@@ -22,13 +21,13 @@ class _SettingPageState extends State<SettingPage> {
 
     //////////  Check langauage on sharedpre if null it will be "en" else user selected ///////////////
     SharedSetting().getSetting("language").then((langValue) {
-      if (langValue!.isEmpty && langValue == "empty") {
+      if (langValue.isEmpty && langValue == "empty" && langValue == null) {
         setState(() {
-          _selectedLang = "en";
+          _selectedLang = langValue;
         });
       } else {
         setState(() {
-          _selectedLang = langValue;
+          _selectedLang = "en";
         });
       }
     });
@@ -114,6 +113,42 @@ class _SettingPageState extends State<SettingPage> {
             ///
             ///
             /////////////      Color    ///////////////////
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       color: MyColors.myGrey.withOpacity(0.70),
+            //       borderRadius: const BorderRadius.all(
+            //         Radius.circular(25.0),
+            //       ),
+            //     ),
+            //     child: Column(
+            //       children: [
+            //         const Padding(
+            //           padding: EdgeInsets.symmetric(vertical: 8),
+            //           child: TitleWidget(
+            //             titleName: 'Application Color',
+            //           ),
+            //         ),
+            //         ColorPicker(
+            //           pickerColor: pickerColor,
+            //           onColorChanged: (Color color) {
+            //             pickerColor = color;
+            //           },
+            //           enableAlpha: false,
+            //           showLabel: false,
+            //           paletteType: PaletteType.rgb,
+            //           pickerAreaHeightPercent: 0.0,
+            //         ),
+            //         ElevatedButton(
+            //             onPressed: () {}, child: const Text("submit")),
+            //         const SizedBox(
+            //           height: 5,
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -124,26 +159,19 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
                 child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8,
+                      ),
                       child: TitleWidget(
-                        titleName: 'Application Color',
+                        titleName: 'About Me',
                       ),
                     ),
-                    ColorPicker(
-                      pickerColor: pickerColor,
-                      onColorChanged: (Color color) {
-                        pickerColor = color;
-                      },
-                      enableAlpha: false,
-                      showLabel: false,
-                      paletteType: PaletteType.rgb,
-                      pickerAreaHeightPercent: 0.0,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {}, child: const Text("submit")),
-                    const SizedBox(
+                    Text("Samer Saied"),
+                    Text("+20 10 10 199 177"),
+                    Text("samer.saied02@gmail.com"),
+                    SizedBox(
                       height: 5,
                     )
                   ],
@@ -154,7 +182,6 @@ class _SettingPageState extends State<SettingPage> {
             ///
             ///
             /////////////      About Me    ///////////////////
-            const TitleWidget(titleName: "About Me"),
           ],
         ),
       ),

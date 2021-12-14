@@ -42,7 +42,7 @@ class _FavoritePageState extends State<FavoritePage> {
             return const CircleLoadingWidget();
           } else if (state is FavoriteErrorState) {
             print(state.error);
-            return const CircleLoadingWidget();
+            return showAlertDialog(context, "loading Favorites Error", () {});
           }
           ////    Empty Image for no Data
           return SizedBox(
@@ -93,7 +93,7 @@ class FavPlaceWidget extends StatelessWidget {
                 key: Key(favoritePlaces[index].id),
                 onDismissed: (direction) {
                   BlocProvider.of<FavCubit>(context)
-                      .updateFavourites(favoritePlaces[index]);
+                      .deleteFavourite(favoritePlaces[index]);
 
                   getSnackBar(context, 'Place deleted successfully.');
                 },

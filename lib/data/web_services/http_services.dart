@@ -14,11 +14,11 @@ class HttpServices {
   Future<String> getData({required String gategory}) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String token = prefs.getString('user') ?? 'empty';
+      String? token = await prefs.getString('user');
       Map<String, String> headersGet = {};
       headersGet.addAll(headers);
       headersGet.putIfAbsent(
-          HttpHeaders.authorizationHeader, () => "Bearer " + token);
+          HttpHeaders.authorizationHeader, () => "Bearer " + token!);
       print(headersGet);
       final response = await http.get(
         Uri.parse(baseUrl + gategory),
@@ -31,10 +31,10 @@ class HttpServices {
       if (response.statusCode == 200) {
         return response.body;
       } else {
-        return 'empty';
+        throw Exception("errorrr2222");
       }
     } catch (error) {
-      rethrow;
+      throw "No User Saved";
     }
   }
 
@@ -108,11 +108,17 @@ class HttpServices {
         statusCode: response.statusCode.toString());
     if (response.statusCode == 200) {
       return response.body;
-    } else if (response.statusCode != 200) {
+    } else if (response.statusCode == 400) {
       {
         Map<String, dynamic> error =
             jsonDecode(response.body) as Map<String, dynamic>;
         throw (error["data"][0]["messages"][0]["message"]);
+      }
+    } else if (response.statusCode != 200 || response.statusCode != 400) {
+      {
+        Map<String, dynamic> error =
+            jsonDecode(response.body) as Map<String, dynamic>;
+        throw (error["data"]);
       }
     } else {
       throw ("Something gone wrong on Login");

@@ -1,5 +1,7 @@
 import 'package:fas7ny/components/shared_widgets.dart';
 import 'package:fas7ny/constants/my_colors.dart';
+import 'package:fas7ny/cubit/fav_cubit/fav_cubit.dart';
+import 'package:fas7ny/cubit/fav_cubit/fav_state.dart';
 import 'package:fas7ny/cubit/place_cubit/place_cubit.dart';
 import 'package:fas7ny/cubit/user_cubit/user_cubit.dart';
 import 'package:fas7ny/models/place_model.dart';
@@ -18,10 +20,9 @@ class DetailsPlacePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<PlaceCubit>(context).getPlace(placeId: placeId);
-    var favCubit = BlocProvider.of<UserCubit>(context);
-    bool isFav = true;
+    var favCubit = BlocProvider.of<FavCubit>(context);
+    bool isFav = favCubit.checkFavourites(placeId);
 
-    //bool isFav = favCubit.checkFavourites(placeId);
     return Scaffold(
       backgroundColor: MyColors.myWhite,
       body: BlocBuilder<PlaceCubit, PlaceState>(
@@ -81,15 +82,15 @@ class DetailsPlacePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             /////////////////  Like   ////////////////
-                            BlocBuilder<UserCubit, UserState>(
+                            BlocBuilder<FavCubit, FavState>(
                                 builder: (context, state) {
                               return TextButton(
                                 onPressed: () {
                                   if (isFav) {
-                                    //   favCubit.deleteFavourite(place);
+                                    favCubit.deleteFavourite(place);
                                     isFav = !isFav;
                                   } else {
-                                    //      favCubit.addFavourites(place);
+                                    favCubit.addFavourite(place);
                                     isFav = !isFav;
                                   }
 

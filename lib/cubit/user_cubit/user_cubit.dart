@@ -57,6 +57,8 @@ class UserCubit extends Cubit<UserState> {
       if (user != null) {
         currentUser = user;
         emit(UserLoadedAutoState(user));
+      } else {
+        emit(UserErrorAutoState("error"));
       }
     }).catchError((error) {
       print("----------Error---4---------------");

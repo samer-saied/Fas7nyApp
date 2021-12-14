@@ -1,7 +1,7 @@
 name: fas7ny
-description: A new Flutter project.
+description: A new project.
 publish_to: none
-version: 1.0.0+2
+version: 1.0.0+3
 environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies:

@@ -2,7 +2,7 @@
     package="com.samersaied.fas7ny">
    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="fas7ny-App"
+        android:label="fas7ny"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

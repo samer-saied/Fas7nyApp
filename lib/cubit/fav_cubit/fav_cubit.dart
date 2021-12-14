@@ -10,6 +10,8 @@ class FavCubit extends Cubit<FavState> {
   ) : super(FavInitial());
 
   List<Place> favoritePlaces = [];
+  List<Place> tempFavoritePlaces = [];
+
   //late String favID;
 
   void getFavourites() {
@@ -22,16 +24,42 @@ class FavCubit extends Cubit<FavState> {
     });
   }
 
+  void addFavourite(Place addedPlace) {
+    emit(FavoriteLoadingState());
+    if (favoritePlaces.isEmpty) {
+      getFavourites();
+    }
+
+    if (checkFavourites(addedPlace.id)) {
+      return;
+    } else {
+      favoritePlaces.add(addedPlace);
+      favRepository
+          .updateFavoritesData(
+        favPlaces: favoritePlaces,
+      )
+          .then((favPlaces) {
+        favoritePlaces = favPlaces;
+        emit(FavoriteLoadedState(favPlaces));
+      }).catchError((error) {
+        emit(FavoriteErrorState(error.toString()));
+      });
+    }
+  }
+
   void deleteFavourite(Place deletedPlace) {
     emit(FavoriteLoadingState());
-    favoritePlaces.remove(deletedPlace);
+    print(deletedPlace);
+    print(favoritePlaces.length);
+
+    print(favoritePlaces.remove(deletedPlace));
+    favoritePlaces.removeWhere((item) => item.id == deletedPlace.id);
 
     favRepository
         .updateFavoritesData(
       favPlaces: favoritePlaces,
     )
         .then((favPlaces) {
-      favoritePlaces = favPlaces;
       emit(FavoriteLoadedState(favPlaces));
     }).catchError((error) {
       print(error.toString());
